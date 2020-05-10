@@ -1,13 +1,3 @@
-### Main function
-
-
-
-//  1. Ensure you edit security rules in section: "azurerm_network_security_rule" "Security_Rule_1"
-//
-//*****************************************************************
-//                  Begin Landing Zone Code                       *
-//*****************************************************************
-
 //Resource Group
 resource "azurerm_resource_group" "Landing_Zone_RG" {
   name     = var.Resource_Group_Name
@@ -18,96 +8,25 @@ resource "azurerm_resource_group" "Landing_Zone_RG" {
   }
 }
 
-//vNET
-resource "azurerm_virtual_network" "Landing_Zone_vNet" {
-  name                = var.vNet_Name
-  location            = var.Landing_Zone_Location
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  address_space       = var.vNet_IP_Space
-  dns_servers         = var.vNet_DNS
-
-    tags = {
-    environment = var.Landing_Zone_Tag
-  }
-
-  }
-//Subnet
-resource "azurerm_subnet" "Azure_Landing_Zone_Sub_1" {
-  name = var.Subnet_1_Name
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_network_name = azurerm_virtual_network.Landing_Zone_vNet.name
-  address_prefix = var.Subnet_1_address_prefix
-}
-//Subnet
-resource "azurerm_subnet" "Azure_Landing_Zone_Sub_2" {
-  name = var.Subnet_2_Name
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_network_name = azurerm_virtual_network.Landing_Zone_vNet.name
-  address_prefix = var.Subnet_2_address_prefix
-  }
-//Subnet
-resource "azurerm_subnet" "Azure_Landing_Zone_Sub_3" {
-  name = var.Subnet_3_Name
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_network_name = azurerm_virtual_network.Landing_Zone_vNet.name
-  address_prefix = var.Subnet_3_address_prefix
-}
-// Azure Bastion Subnet - DO NOT CHNAGE THE NAME - Bastion Service Requires the AzureBastionSubnet as the name
-resource "azurerm_subnet" "Landing_Zone-AzureBastionSubnet" {
-  name = "AzureBastionSubnet"
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_network_name = azurerm_virtual_network.Landing_Zone_vNet.name
-  address_prefix = var.AzureBastionSubnet_address_prefix
-
-}
-
-
-//Landing Zone NSG
-resource "azurerm_network_security_group" "Azure_Landing_Zone_NSG" {
-  name                = var.Landing_Zone_NSG_Name
+resource "azurerm_log_analytics_workspace" "Hub_Log_Analytics_Workspace" {
+  name                = var.Hub_Log_Analytics_Workspace_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
 }
 
-
-resource "azurerm_network_security_rule" "Security_Rule_1" {
-  name                        = "Azure Landing Zone Rule 1"
-  priority                    = 200
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "80"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.Landing_Zone_RG.name
-  network_security_group_name = azurerm_network_security_group.Azure_Landing_Zone_NSG.name
-}
-
-
-//Bastion Service Setup
-resource "azurerm_public_ip" "bastion_public_ip" {
-  name                = "bastion_public_ip"
+resource "azurerm_recovery_services_vault" "Hub_Recovery_Services_Vault" {
+  name                = var.Hub_Recovery_Services_Vault_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  allocation_method   = "Static"
   sku                 = "Standard"
+
+  soft_delete_enabled = true
 }
 
-resource "azurerm_bastion_host" "Azure_Landing_Zone_bastion_host" {
-  name                = "BastionService"
-  location            = azurerm_resource_group.Landing_Zone_RG.location
-  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-
-  ip_configuration {
-    name                 = "configuration"
-    subnet_id            = azurerm_subnet.Landing_Zone-AzureBastionSubnet.id
-    public_ip_address_id = azurerm_public_ip.bastion_public_ip.id
-  }
-}
-
-resource "azurerm_storage_account" "Azure_Landing_Zone_Storage_Account" {
-  name                     = var.Landing_Zone_Storage_Account_Name
+resource "azurerm_storage_account" "Hub_Storage_BootDiag_Storage_Account" {
+  name                     = var.Hub_Storage_BootDiag_Storage_Account_Name
   resource_group_name      = azurerm_resource_group.Landing_Zone_RG.name
   location                 = azurerm_resource_group.Landing_Zone_RG.location
   account_tier             = "Standard"
@@ -117,4 +36,3 @@ resource "azurerm_storage_account" "Azure_Landing_Zone_Storage_Account" {
     environment = var.Landing_Zone_Tag
   }
 }
-
