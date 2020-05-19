@@ -189,7 +189,7 @@ variable "Landing_Zone_VPN1_Shared_Key" {
 //VPN2
 
 variable "Landing_Zone_VPN2_Enabled" {
-  default     = true
+  default     = false
   description = "Enable/Disable VPN 2"
   type        = bool
 }
