@@ -24,63 +24,59 @@ https://github.com/PaloAltoNetworks/terraform-templates/tree/master/azure_two_ti
 
 
 */
-data "azurerm_resource_group" "PAN_FW_RG" {
-  name = "rg-hub-eastus"
-}
-
 
 data "azurerm_virtual_network" "PAN_FW_VNET" {
   name                = "vent-hub-eastus"
-  resource_group_name = "rg-hub-eastus"
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
 }
 #refer to a subnet
 data "azurerm_subnet" "PAN_FW_Subnet0" {
   name                 = "snet-management"
   virtual_network_name = "vent-hub-eastus"
-  resource_group_name  = "rg-hub-eastus"
+  resource_group_name  = azurerm_resource_group.Landing_Zone_RG.name
 }
 data "azurerm_subnet" "PAN_FW_Subnet1" {
   name                 = "snet-private"
   virtual_network_name = "vent-hub-eastus"
-  resource_group_name  = "rg-hub-eastus"
+  resource_group_name  = azurerm_resource_group.Landing_Zone_RG.name
 }
 data "azurerm_subnet" "PAN_FW_Subnet2" {
   name                 = "snet-public"
   virtual_network_name = "vent-hub-eastus"
-  resource_group_name  = "rg-hub-eastus"
+  resource_group_name  = azurerm_resource_group.Landing_Zone_RG.name
 }
 
 
 resource "azurerm_public_ip" "PublicIP_0" {
   name                = "test-pip"
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   allocation_method   = "Dynamic"
   domain_name_label   = "paloaltopip"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
+  location            = azurerm_resource_group.Landing_Zone_RG.location
 }
 
 
 resource "azurerm_public_ip" "PublicIP_1" {
   name                = "test-pip1"
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   allocation_method   = "Dynamic"
   domain_name_label   = "paloaltopip1"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
+  location            = azurerm_resource_group.Landing_Zone_RG.location
 }
 
 resource "azurerm_public_ip" "PublicIP_2" {
   name                = "test-pip2"
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   allocation_method   = "Dynamic"
   domain_name_label   = "paloaltopip2"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
+  location            = azurerm_resource_group.Landing_Zone_RG.location
 }
 
 //address_prefix = join("", list(var.IPAddressPrefix, ".2.0/24"))
 resource "azurerm_network_interface" "VNIC0" {
   name                = "vnic0-nic"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  location            = azurerm_resource_group.Landing_Zone_RG.location
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
 
 
   ip_configuration {
@@ -96,8 +92,8 @@ resource "azurerm_network_interface" "VNIC0" {
 
 resource "azurerm_network_interface" "VNIC1" {
   name                = "vnic0-nic1"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  location            = azurerm_resource_group.Landing_Zone_RG.location
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   //depends_on          = ["azurerm_virtual_network.PAN_FW_VNET"]
 
   enable_ip_forwarding = true
@@ -114,8 +110,8 @@ resource "azurerm_network_interface" "VNIC1" {
 
 resource "azurerm_network_interface" "VNIC2" {
   name                = "vnic0-nic2"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  location            = azurerm_resource_group.Landing_Zone_RG.location
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   //depends_on          = ["azurerm_virtual_network.PAN_FW_VNET"]
 
   enable_ip_forwarding = true
@@ -132,8 +128,8 @@ resource "azurerm_network_interface" "VNIC2" {
 
 resource "azurerm_virtual_machine" "testdeploy" {
   name                = "D1WIN03P"
-  location            = data.azurerm_resource_group.PAN_FW_RG.location
-  resource_group_name = data.azurerm_resource_group.PAN_FW_RG.name
+  location            = azurerm_resource_group.Landing_Zone_RG.location
+  resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
   //network_interface_ids = [azurerm_network_interface.testdeploy.id]
   vm_size = "Standard_D3_v2"
 

@@ -1,14 +1,5 @@
 //Variables
 
-variable "subscription_id" {
-  description = "Azure Subscription Id"
-  type        = string
-}
-variable "tenant_id" {
-  description = "Azure Tenant Id"
-  type        = string
-}
-
 //Landing Zone Location
 variable "Landing_Zone_Location" {
   default     = "East US"
@@ -30,21 +21,14 @@ variable "Resource_Group_Name" {
   type        = string
 }
 
-//vNet Name
-variable "vNet_Name" {
-  default     = "Hub_vNet"
-  description = "Virtual Network Name"
+//vNet IP Space
+variable "vNet_IP_Space" {
+  default     = "10.0.0.0/16"
+  description = "IP Space to use for Virtual Network"
   type        = string
 }
 
-//vNet Name
-variable "vNet_IP_Space" {
-  default     = ["10.0.0.0/16"]
-  description = "IP Space to use for Virtual Network"
-  type        = list(string)
-}
-
-//vNet Name
+//vNet DNS
 variable "vNet_DNS" {
   default     = ["8.8.8.8", "8.8.4.4"]
   description = "DNS Servers to be used by Virtual Network"
@@ -82,7 +66,7 @@ variable "Subnet_3_Name" {
   description = "Subnet name for the Public Subnet"
   type        = string
 }
-variable "PublicSubnet" {
+variable "Subnet_3_address_prefix" {
   default     = "10.0.30.0/24"
   description = "Subnet address prefix for the Public Subnet"
   type        = string
@@ -138,19 +122,19 @@ variable "Landing_Zone_NSG_Name" {
 }
 
 variable "Hub_Storage_BootDiag_Storage_Account_Name" {
-  default     = "Landing_Zone_BootDiag_Storage_Account"
+  default     = "hubbootdiagdefault"
   description = "Name for the Boot Diagnostic Storage Account"
   type        = string
 }
 
 variable "Hub_Recovery_Services_Vault_Name" {
-  default     = "Landing_Zone_Hub_Recovery_Services_Vault_Name"
+  default     = "HubRecoveryServicesVault"
   description = "Name for the Recovery Services Vault"
   type        = string
 }
 
 variable "Hub_Log_Analytics_Workspace_Name" {
-  default     = "Landing_Zone_Hub_Log_Analytics_Workspace__Name"
+  default     = "HubLogAnalyticsWorkspace"
   description = "Name for the Log Analytics Workspace"
   type        = string
 }
@@ -194,7 +178,7 @@ variable "Landing_Zone_VPN2_Enabled" {
   type        = bool
 }
 
-variable "Landing_Zone_VPN1_Name" {
+variable "Landing_Zone_VPN2_Name" {
   default     = "Landing_Zone_VPN1_Datacenter2"
   description = "Name of VPN 2"
   type        = string

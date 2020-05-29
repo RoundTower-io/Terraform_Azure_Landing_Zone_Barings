@@ -2,10 +2,6 @@
 resource "azurerm_resource_group" "Landing_Zone_RG" {
   name     = var.Resource_Group_Name
   location = var.Landing_Zone_Location
-
-  tags = {
-    environment = var.Landing_Zone_Tag
-  }
 }
 
 resource "azurerm_log_analytics_workspace" "Hub_Log_Analytics_Workspace" {
@@ -31,8 +27,4 @@ resource "azurerm_storage_account" "Hub_Storage_BootDiag_Storage_Account" {
   location                 = azurerm_resource_group.Landing_Zone_RG.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
-
-  tags = {
-    environment = var.Landing_Zone_Tag
-  }
 }

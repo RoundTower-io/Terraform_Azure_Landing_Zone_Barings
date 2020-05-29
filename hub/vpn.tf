@@ -30,21 +30,21 @@ resource "azurerm_virtual_network_gateway" "Landing_Zone_VPN1_VNG" {
   sku           = "Basic"
 
   ip_configuration {
-    public_ip_address_id          = azurerm_public_ip.Landing_Zone_VPN1_Public_IP.id
+    public_ip_address_id          = azurerm_public_ip.Landing_Zone_VPN1_Public_IP[0].id
     private_ip_address_allocation = "Dynamic"
-    subnet_id                     = module.network.vnet_subnets[0]
+    subnet_id                     = module.Landing_Zone_vNet.vnet_subnets[0]
   }
 }
 
-resource "azurerm_virtual_network_gateway_connection" "Landing_Zone_VPN" {
+resource "azurerm_virtual_network_gateway_connection" "Landing_Zone_VPN1" {
   count               = var.Landing_Zone_VPN1_Enabled == true ? 1 : 0
   name                = var.Landing_Zone_VPN1_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
 
   type                       = "IPsec"
-  virtual_network_gateway_id = azurerm_virtual_network_gateway.Landing_Zone_VPN1_VNG.id
-  local_network_gateway_id   = azurerm_local_network_gateway.Landing_Zone_VPN1_LNG.id
+  virtual_network_gateway_id = azurerm_virtual_network_gateway.Landing_Zone_VPN1_VNG[0].id
+  local_network_gateway_id   = azurerm_local_network_gateway.Landing_Zone_VPN1_LNG[0].id
 
   shared_key = var.Landing_Zone_VPN1_Shared_Key
 }
@@ -81,21 +81,21 @@ resource "azurerm_virtual_network_gateway" "Landing_Zone_VPN2_VNG" {
   sku           = "Basic"
 
   ip_configuration {
-    public_ip_address_id          = azurerm_public_ip.Landing_Zone_VPN2_Public_IP.id
+    public_ip_address_id          = azurerm_public_ip.Landing_Zone_VPN2_Public_IP[0].id
     private_ip_address_allocation = "Dynamic"
-    subnet_id                     = module.network.vnet_subnets[0]
+    subnet_id                     = module.Landing_Zone_vNet.vnet_subnets[0]
   }
 }
 
-resource "azurerm_virtual_network_gateway_connection" "Landing_Zone_VPN" {
+resource "azurerm_virtual_network_gateway_connection" "Landing_Zone_VPN2" {
   count               = var.Landing_Zone_VPN2_Enabled == true ? 1 : 0
   name                = var.Landing_Zone_VPN2_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
 
   type                       = "IPsec"
-  virtual_network_gateway_id = azurerm_virtual_network_gateway.Landing_Zone_VPN2_VNG.id
-  local_network_gateway_id   = azurerm_local_network_gateway.Landing_Zone_VPN2_LNG.id
+  virtual_network_gateway_id = azurerm_virtual_network_gateway.Landing_Zone_VPN2_VNG[0].id
+  local_network_gateway_id   = azurerm_local_network_gateway.Landing_Zone_VPN2_LNG[0].id
 
   shared_key = var.Landing_Zone_VPN2_Shared_Key
 }

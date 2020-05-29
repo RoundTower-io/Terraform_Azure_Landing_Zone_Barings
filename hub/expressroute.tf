@@ -13,7 +13,7 @@ resource "azurerm_virtual_hub" "Landing_Zone_ExpressRoute1_VHUB" {
   name                = var.Landing_Zone_ExpressRoute1_VHUB_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_wan_id      = azurerm_virtual_wan.Landing_Zone_ExpressRoute1_VWAN.id
+  virtual_wan_id      = azurerm_virtual_wan.Landing_Zone_ExpressRoute1_VWAN[0].id
   address_prefix      = var.Landing_Zone_ExpressRoute1_VHUB_Address_Prefix
 }
 
@@ -22,7 +22,7 @@ resource "azurerm_express_route_gateway" "Landing_Zone_ExpressRoute1_Gateway" {
   name                = var.Landing_Zone_ExpressRoute1_Gateway_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_hub_id      = azurerm_virtual_hub.example.id
+  virtual_hub_id      = azurerm_virtual_hub.Landing_Zone_ExpressRoute1_VHUB[0].id
   scale_units         = var.Landing_Zone_ExpressRoute1_Gateway_Scale_Units
 }
 
@@ -39,7 +39,7 @@ resource "azurerm_virtual_hub" "Landing_Zone_ExpressRoute2_VHUB" {
   name                = var.Landing_Zone_ExpressRoute2_VHUB_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_wan_id      = azurerm_virtual_wan.Landing_Zone_ExpressRoute2_VWAN.id
+  virtual_wan_id      = azurerm_virtual_wan.Landing_Zone_ExpressRoute2_VWAN[0].id
   address_prefix      = var.Landing_Zone_ExpressRoute2_VHUB_Address_Prefix
 }
 
@@ -48,6 +48,6 @@ resource "azurerm_express_route_gateway" "Landing_Zone_ExpressRoute2_Gateway" {
   name                = var.Landing_Zone_ExpressRoute2_Gateway_Name
   location            = azurerm_resource_group.Landing_Zone_RG.location
   resource_group_name = azurerm_resource_group.Landing_Zone_RG.name
-  virtual_hub_id      = azurerm_virtual_hub.example.id
+  virtual_hub_id      = azurerm_virtual_hub.Landing_Zone_ExpressRoute2_VHUB[0].id
   scale_units         = var.Landing_Zone_ExpressRoute2_Gateway_Scale_Units
 }
